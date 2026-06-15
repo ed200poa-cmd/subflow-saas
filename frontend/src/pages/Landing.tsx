@@ -77,9 +77,6 @@ export function Landing() {
       {/* Hero */}
       <section className="bg-gradient-to-b from-sky-50 to-white py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <span className="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full mb-4">
-            Production SaaS Demo
-          </span>
           <h1 className="text-5xl font-extrabold text-gray-900 leading-tight">
             Subscription management
             <br />
