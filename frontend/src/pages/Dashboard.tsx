@@ -43,7 +43,7 @@ export function Dashboard() {
   const planInfo = PLAN_LABELS[plan];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50">
       <div className="max-w-4xl mx-auto px-4 py-10">
         {successParam && (
           <div className="bg-green-50 border border-green-200 text-green-700 rounded-xl px-4 py-3 mb-6 text-sm">

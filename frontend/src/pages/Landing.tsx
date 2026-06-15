@@ -73,9 +73,9 @@ export function Landing() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-indigo-50">
       {/* Hero */}
-      <section className="bg-white py-20 px-4">
+      <section className="bg-gradient-to-b from-sky-50 to-white py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <span className="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full mb-4">
             Production SaaS Demo
@@ -123,7 +123,7 @@ export function Landing() {
       </section>
 
       {/* Pricing */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900">
