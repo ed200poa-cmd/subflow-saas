@@ -55,10 +55,11 @@ export function Register() {
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="register-email" className="block text-sm font-medium text-gray-700 mb-1">
               Email
             </label>
             <input
+              id="register-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -69,10 +70,11 @@ export function Register() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="register-password" className="block text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
             <input
+              id="register-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -83,10 +85,11 @@ export function Register() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="register-confirm" className="block text-sm font-medium text-gray-700 mb-1">
               Confirm Password
             </label>
             <input
+              id="register-confirm"
               type="password"
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}

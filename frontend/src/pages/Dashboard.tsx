@@ -66,13 +66,14 @@ export function Dashboard() {
             </h2>
             <div className="flex items-center gap-3 mb-4">
               <span
+                data-testid="current-plan"
                 className={`px-3 py-1 rounded-full text-sm font-semibold ${planInfo.color}`}
               >
                 {planInfo.label}
               </span>
               <span className="text-sm text-gray-500">
                 Status:{" "}
-                <span className="font-medium text-gray-700">
+                <span data-testid="subscription-status" className="font-medium text-gray-700">
                   {sub?.status ?? "—"}
                 </span>
               </span>
