@@ -15,4 +15,13 @@ export class AdminPage {
   async goto(): Promise<void> {
     await this.page.goto("/admin");
   }
+
+  // The value printed under a stat card label such as "Total Users".
+  stat(label: string): Locator {
+    return this.page
+      .locator("div", { has: this.page.getByText(label, { exact: true }) })
+      .last()
+      .locator("p")
+      .nth(1);
+  }
 }

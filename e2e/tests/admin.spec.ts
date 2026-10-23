@@ -24,6 +24,10 @@ test("the seeded admin logs in and sees the admin portal with real users", async
   // so the account created just above must be listed. (The seeded admin is not
   // asserted: on a reused local database it can be older than the newest 100.)
   await expect(admin.subscribersTable.getByRole("cell", { name: otherEmail, exact: true })).toBeVisible();
+
+  // Stats default to 0 without data; at least the admin and the user above exist.
+  const totalUsers = Number(await admin.stat("Total Users").innerText());
+  expect(totalUsers).toBeGreaterThanOrEqual(2);
 });
 
 test("a regular user is kept out of /admin in the UI and by the API", async ({ page, request }) => {
@@ -34,12 +38,13 @@ test("a regular user is kept out of /admin in the UI and by the API", async ({ p
   await expect(page).toHaveURL(/\/dashboard$/);
   await expect(new Navbar(page).adminLink).toHaveCount(0);
 
-  // The client-side redirect is not the real protection; the API must refuse too.
-  const asUser = await request.get(`${BACKEND_URL}/trpc/admin.getUsers`, {
-    headers: { Authorization: `Bearer ${auth.token}` },
-  });
-  expect(asUser.status()).toBe(403);
-
-  const anonymous = await request.get(`${BACKEND_URL}/trpc/admin.getUsers`);
-  expect(anonymous.status()).toBe(401);
+  // The client-side redirect is not the real protection; every admin procedure
+  // must refuse a regular user (403) and an anonymous caller (401).
+  for (const procedure of ["getStats", "getUsers", "getRevenue", "getUsageStats"]) {
+    const url = `${BACKEND_URL}/trpc/admin.${procedure}`;
+    const asUser = await request.get(url, { headers: { Authorization: `Bearer ${auth.token}` } });
+    expect(asUser.status(), `admin.${procedure} as a regular user`).toBe(403);
+    const anonymous = await request.get(url);
+    expect(anonymous.status(), `admin.${procedure} without a token`).toBe(401);
+  }
 });

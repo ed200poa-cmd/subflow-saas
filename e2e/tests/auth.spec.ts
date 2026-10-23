@@ -19,10 +19,11 @@ test("a new user can register and lands on a dashboard backed by real data", asy
   await expect(page).toHaveURL(/\/dashboard$/);
   await expect(dashboard.heading).toBeVisible();
   await expect(dashboard.welcome(email)).toBeVisible();
-  // Plan and status come from subscription.status, i.e. the row the backend
-  // inserted into Postgres during registration.
-  await expect(dashboard.currentPlan).toHaveText("Free");
+  // Status proves the data came from Postgres: it is "active" only when
+  // subscription.status returns the row inserted at registration (a placeholder otherwise).
+  // The plan label also falls back to "Free" without data, so it is a UI check only.
   await expect(dashboard.subscriptionStatus).toHaveText("active");
+  await expect(dashboard.currentPlan).toHaveText("Free");
 
   const nav = new Navbar(page);
   await expect(nav.userEmail(email)).toBeVisible();

@@ -1,12 +1,13 @@
 import { test as base, expect } from "@playwright/test";
 
-// Every test fails if the browser tries to reach Stripe. Requests are aborted
-// before they leave the machine and recorded so the test can assert on them.
+// Every test fails if any page in its browser context (including popups and new
+// tabs) tries to reach Stripe. Requests are aborted before they leave the machine
+// and recorded so the test can assert on them.
 export const test = base.extend<{ stripeRequests: string[] }>({
   stripeRequests: [
-    async ({ page }, use) => {
+    async ({ context }, use) => {
       const hits: string[] = [];
-      await page.route(/^https?:\/\/([^/]*\.)?stripe\.com\//, (route) => {
+      await context.route(/^https?:\/\/([^/]*\.)?stripe\.com\//, (route) => {
         hits.push(route.request().url());
         return route.abort();
       });

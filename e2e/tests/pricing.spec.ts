@@ -1,5 +1,6 @@
 import type { Route } from "@playwright/test";
 import { test, expect } from "../support/fixtures";
+import { BACKEND_URL } from "../support/env";
 import { registerViaApi, signInWithStorage, uniqueEmail } from "../support/api";
 import { PricingPage } from "../pages/pricing-page";
 import { RegisterPage } from "../pages/register-page";
@@ -71,4 +72,22 @@ test("a signed-out visitor choosing a plan is sent to sign-up and no checkout is
   await expect(page).toHaveURL(/\/register$/);
   await expect(new RegisterPage(page).heading).toBeVisible();
   expect(captured.calls).toBe(0);
+});
+
+// The browser tests above mock subscription.create. Its guards run before any
+// Stripe call, so they can be checked against the real backend directly.
+test("the backend refuses checkout without a session and rejects unknown plans", async ({
+  request,
+}) => {
+  const url = `${BACKEND_URL}/trpc/subscription.create`;
+
+  const anonymous = await request.post(url, { data: { plan: "pro" } });
+  expect(anonymous.status()).toBe(401);
+
+  const auth = await registerViaApi(request, uniqueEmail("checkout-guard"));
+  const unknownPlan = await request.post(url, {
+    data: { plan: "gold" },
+    headers: { Authorization: `Bearer ${auth.token}` },
+  });
+  expect(unknownPlan.status()).toBe(400);
 });

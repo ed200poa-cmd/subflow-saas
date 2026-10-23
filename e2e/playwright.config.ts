@@ -47,14 +47,16 @@ export default defineConfig({
       cwd: "../backend",
       url: `${BACKEND_URL}/health`,
       env: backendEnv,
-      reuseExistingServer: !isCI,
+      // Never reuse a running dev server: it would skip the schema push, the seed
+      // and these dummy values. A busy port fails the run instead.
+      reuseExistingServer: false,
       timeout: 120_000,
     },
     {
       command: "npx vite --port 5173 --strictPort",
       cwd: "../frontend",
       url: FRONTEND_URL,
-      reuseExistingServer: !isCI,
+      reuseExistingServer: false,
       timeout: 120_000,
     },
   ],
